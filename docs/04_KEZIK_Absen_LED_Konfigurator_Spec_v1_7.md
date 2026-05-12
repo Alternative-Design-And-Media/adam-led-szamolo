@@ -1273,6 +1273,8 @@ function validate(inputs) {
 
 ## 11. Példa-konfigurációk
 
+> **A v1.7-es BoM-példák tartalmazzák:** (a) **fizikai MX30 AD KIT default** (v1.6 — NEM Virtual Package), (b) **stack szabály N−1 front leg + H≥2m back brace** (v1.5), (c) **10 új Absen-rekord** integrálva minden példába: rigvas konténer (5155/5156), powerCON TRUE1 család 6 tagra bővítve (5699 + 5700), M8 csavarok (4623/4624), kabinet-zár (4625), pillangós AD kit (4626), prizma pre-build kit-ek (5784/5931), továbbá (d) **kábeles táska bontás** (4594/4595) és (e) **Absen betápdoboz alternatíva** (5718) az itemized CEE 16A + RCD lista mellett.
+
 ### Példa A — 6×3 m P3.9 kültéri stack
 
 **Bemenet:** W=6, H=3, pitch=P3.9, installType=ground-stack, brightness=outdoor, cabinetPref=auto-1000-prefer, fiberLength=50
@@ -1281,18 +1283,45 @@ function validate(inputs) {
 - cols=12, rows=6, total=72, sideCount=1
 - p500x1000=36 (12 × 3 pár), p500x500=0
 - px: 1536 × 768 = 1 179 648 pixel
-- Max W (kültéri): 36 × 300 × 1.0 = 10 800 W → 4 × 16A áramkör
+- Max W (kültéri): 36 × 300 × 1.0 = 10 800 W
+- **Áramkör-szám (v1.5 dual-limit):** `circuits_by_power = ceil(10800×1.25/3680) = 4`, `circuits_by_leakage = ceil(36×1.4/9) = 6` → **6 áramkör** (szivárgás dominál a 500×1000 panel 1,4 mA/db szivárgása miatt)
 
 **Várt BoM (kivonat):**
-- 36× ABSEN-DISPLAY-P3.9-500x1000-OUTDOOR-7680HZ (Rentman 2122)
-- 1× NOVASTAR-KU20-OPTIKA-6PORT-AD-KIT (Rentman code 2678) — 1,18 M pixel ≤ 3,9 M → KU20-kit
-- 6× ABSEN-STACK-VAS-FIX-1M (Rentman 2682, 6 m W → 6 db 1m)
-- 6× ABSEN-STACK-FRONT-LEG (Rentman 2683)
-- 6× ABSEN-CABINET-SUPPORT-BRACE (Rentman 2759, H = 3 m ≥ 1,5 m)
-- 9× PL3.9-FC-4IN1 (ceil(36/4))
-- 4× CEE-16A-ELOSZTO-5x + 4× FI-RELE-30MA
-- 4× POWERCON-TRUE1-NOVASTAR-20M (Rentman 3224, 1 db / áramkör)
-- ⚠ info-sor: KÜLTÉRI firmware konfig (4500 nit) a fal összeállása után
+
+*LED-kabinetek:*
+- 36× ABSEN-DISPLAY-P3.9-500x1000-OUTDOOR-7680HZ (Rentman 4564/2122)
+
+*Kábeles készletek (v1.7 új):*
+- 5× ABSEN-CABLE-BAG-SMALL-8CAB (Rentman 4594/2152, ceil(36/8), 500×1000-hoz kicsi táska)
+
+*Processzor + adatlánc (v1.6 fizikai AD KIT default):*
+- 1× NOVASTAR-MX30-10E-2S-AD-KIT (Rentman 4608/2166, 1,18 M ≤ 6,5 M pixel — MX30 az 50Hz/8bit redundánshoz)
+- 2× NOVASTAR-CVT10-S (Rentman 5348/2666, master OPT1 + backup OPT2)
+- 2× NOVASTAR-10G-SFP-MODULE-SM (Rentman 5517/2819, 1 SFP / CVT10 az optikai port-hoz)
+- 1× NOVASTAR-RACK-2U-DOUBLE-DOOR (Rentman 5553/2855, MX30 + 2 CVT10 egy rack-be)
+
+*Stack (v1.5 N−1 front leg + H≥2m back brace):*
+- 6× ABSEN-STACK-VAS-FIX-1M (Rentman 5364/2682, 6 m egyenes W)
+- **11× ABSEN-STACK-FRONT-LEG** (Rentman 5365/2683, N−1 = 11 belső kabinet-kabinet illesztés)
+- **6× ABSEN-CABINET-SUPPORT-BRACE** (Rentman 5441/2759, H=3m ≥ 2m → ceil(11/2)=6 minden 2.)
+
+*Hordládák:*
+- 9× PL3.9-FC-4IN1 (Rentman 4597/2155, ceil(36/4))
+
+*Áramelosztás (v1.6 kit-szintű alternatíva):*
+- **Opció A (kit-szintű):** 1× ABSEN-POWER-BOX-6x16A (Rentman 5718/3278, 32A→6×16A — pont 6 áramkörre)
+- **Opció B (itemized):** 6× CEE-16A-ELOSZTO-5x + 6× FI-RELE-30MA + 1× 3-fázisú bevezetés
+
+*Tápkábelek (v1.7 új powerCON TRUE1 család):*
+- 6× POWERCON-TRUE1-ABSEN-20M (Rentman 4591/2149, 1 main feed / áramkör — a kábeles táskákban már benne van 5 db, +1 stand-alone)
+
+*Kabinet-összekötők (v1.7 új 2.13 szekció):*
+- **288× M8x16 ABSEN-CSAVAR** (Rentman 4624/2182, N×M×4 = 72×4 lábcsavar)
+- **Opció A (egységár-csomag):** 5× P3.9-ABSEN-LOCK-KIT-5x3 (Rentman 4626/2184, ceil(72/15)=5 pillangós koffer)
+- **Opció B (per darab):** 126× ABSEN-CABINET-LOCK-SIMPLA (Rentman 4625/2183, (12-1)×6 + 12×(6-1) = 66+60 horizontális+függőleges szomszéd)
+
+*Helyszíni operatív:*
+- ⚠ info-sor: **KÜLTÉRI firmware konfig (4500 nit)** feltöltése a fal összeállása után
 
 ### Példa B — 4×2,5 m P2.5 beltéri stack
 
@@ -1302,41 +1331,107 @@ function validate(inputs) {
 - cols=8, rows=5, total=40
 - p500x500=40
 - px: 1600 × 1000 = 1 600 000 pixel
-- Max W: 40 × 160 × 1.0 = 6 400 W → 2 × 16A áramkör
+- Max W: 40 × 160 × 1.0 = 6 400 W
+- **Áramkör-szám (v1.5 dual-limit):** `circuits_by_power = ceil(6400×1.25/3680) = 3`, `circuits_by_leakage = ceil(40×0.7/9) = 4` → **4 áramkör** (szivárgás dominál P2.5-nél, 0,7 mA/panel)
 
 **Várt BoM (kivonat):**
-- 40× ABSEN-PL2.5-PLUS-V2-500x500-STANDARD (Rentman 2784)
-- 1× NOVASTAR-KU20-OPTIKA-6PORT-AD-KIT (Rentman 2678, 1,6 M pixel ≤ 3,9 M, de 5 port szükséges 6-ból)
-- 4× ABSEN-STACK-VAS-FIX-1M (Rentman 2682, 4 m W → 4 db 1m)
-- 4× ABSEN-STACK-FRONT-LEG (Rentman 2683)
-- 4× ABSEN-CABINET-SUPPORT-BRACE (Rentman 2759, H = 2,5 m ≥ 1,5 m)
-- 7× ABSEN-FC-PL2.5-PLUS-V2-6IN1-PLASTIC (ceil(40/6))
-- 2× CEE-16A-ELOSZTO-5x + 2× FI-RELE-30MA
-- 2× POWERCON-TRUE1-NOVASTAR-20M
 
-### Példa C — 5×3 m P3.9 függesztett
+*LED-kabinetek:*
+- 40× ABSEN-PL2.5-PLUS-V2-500x500-STANDARD (Rentman 5474/2784)
+
+*Kábeles készletek (v1.7 új):*
+- 4× ABSEN-CABLE-BAG-LARGE-12CAB (Rentman 4595/2153, ceil(40/12), 500×500-hoz nagy táska)
+
+*Processzor + adatlánc (v1.6 default):*
+- 1× NOVASTAR-MX30-10E-2S-AD-KIT (Rentman 4608/2166, 1,6 M ≤ 6,5 M)
+- 2× NOVASTAR-CVT10-S (5348/2666) + 2× NOVASTAR-10G-SFP-MODULE-SM (5517/2819) + 1× NOVASTAR-RACK-2U (5553/2855)
+
+*Stack (v1.5 szabály):*
+- 4× ABSEN-STACK-VAS-FIX-1M (5364/2682)
+- **7× ABSEN-STACK-FRONT-LEG** (5365/2683, N−1=7)
+- **4× ABSEN-CABINET-SUPPORT-BRACE** (5441/2759, H=2,5m ≥ 2m → ceil(7/2)=4)
+
+*Hordládák:*
+- 7× ABSEN-FC-PL2.5-PLUS-V2-6IN1-PLASTIC (5475/2785, ceil(40/6))
+
+*Áramelosztás:*
+- **Opció A:** 1× ABSEN-POWER-BOX-6x16A (5718/3278, 6 áramkörből 4 használt)
+- **Opció B:** 4× CEE-16A + 4× FI-RELE-30MA + 1× 3-fáz bevezetés
+
+*Tápkábelek:*
+- 4× POWERCON-TRUE1-ABSEN-20M (4591/2149)
+
+*Kabinet-összekötők (v1.7 új):*
+- **160× M8x16** (4624/2182, 40×4)
+- **Opció A:** 3× P3.9-ABSEN-LOCK-KIT-5x3 (4626/2184, ceil(40/15)=3 — megj.: a koffer P3.9-jelölésű de univerzális Absen lock-rendszer, P2.5-re is megy)
+- **Opció B:** 67× ABSEN-CABINET-LOCK-SIMPLA (4625/2183, (8-1)×5 + 8×(5-1) = 35+32)
+
+### Példa C — 5×3 m P3.9 függesztett (flown)
 
 **Bemenet:** W=5, H=3, pitch=P3.9, installType=flown, brightness=outdoor
 
-**Várt:**
+**Várt layout:**
 - cols=10, rows=6, total=60
 - p500x1000=30
-- 5× ABSEN-RIGVAS-1.0M (Rentman 2482, 5 m W → 5 db 1 m)
-- 7× SAFETY-STEEL-1.5M (5 rigvas pont + 2 backup)
-- 1× NOVASTAR-KU20-OPTIKA-6PORT-AD-KIT (Rentman 2678, 1,18 M pixel ≤ 3,9 M)
-- 8× PL3.9-FC-4IN1 (ceil(30/4))
-- 4× POWERCON-TRUE1-NOVASTAR-20M
+- 921 600 pixel
+- Max W (kültéri): 30 × 300 × 1.0 = 9000 W
+- Áramkör: `power_by = 3`, `leakage_by = ceil(30×1.4/9) = 5` → **5 áramkör**
 
-### Példa D — 4×2,5 m P3.9 hajlított (R=2 m, 90°)
+**Várt BoM (kivonat):**
+
+*LED-kabinetek:*
+- 30× ABSEN-DISPLAY-P3.9-500x1000-OUTDOOR-7680HZ (4564/2122)
+
+*Kábeles készletek:*
+- 4× ABSEN-CABLE-BAG-SMALL-8CAB (4594/2152, ceil(30/8))
+
+*Rigging (W_eff=5m < 8m AD kit küszöb → stand-alone):*
+- **5× ABSEN-RIGVAS-1.0M** (Rentman 5154/2482, 5 m W → 5 db 1 m)
+- 7× SAFETY-STEEL-1.5M (5 rigvas pont + 2 backup)
+- *(megj.: 5155 nagy konténer NEM szükséges, mert nem AD kit-be megy; stand-alone rigvas-okat a normál táskákban szállítjuk)*
+
+*Processzor + adatlánc (v1.6 default):*
+- 1× NOVASTAR-MX30-10E-2S-AD-KIT (4608/2166) + 2× CVT10-S (5348/2666) + 2× SFP (5517/2819) + 1× Rack 2U (5553/2855)
+
+*Hordládák:*
+- 8× PL3.9-FC-4IN1 (4597/2155, ceil(30/4))
+
+*Áramelosztás:*
+- 1× ABSEN-POWER-BOX-6x16A (5718/3278, 6 áramkörből 5 használt)
+
+*Tápkábelek:*
+- 5× POWERCON-TRUE1-ABSEN-20M (4591/2149)
+
+*Kabinet-összekötők:*
+- **240× M8x16** (4624/2182, 60×4)
+- **4× P3.9-ABSEN-LOCK-KIT-5x3** (4626/2184, ceil(60/15)=4)
+
+### Példa D — 4×2,5 m P3.9 hajlított (curved, R=2 m, 90°)
 
 **Bemenet:** W=4 (ívhossz), H=2.5, pitch=P3.9, installType=curved, curveR=2, curveAngle=90
 
 **Várt:**
-- Ívhossz = π × R × szög/180 = π × 2 × 0,5 ≈ 3,14 m (közelítve W=4-re a felfelé kerekítéssel)
+- Ívhossz = π × R × szög/180 = π × 2 × 0,5 ≈ 3,14 m (W=4-re felfelé kerekítve)
 - cols=8, rows=5, total=40
-- p500x500=40 vagy mix (NORMÁL kabinetek a curve-lock-kal)
-- 90°/8 = 11,25° per csatlakozás → ⚠ figyelmeztetés: meghaladja a 10°-os limitet → vagy több, kisebb szegmensre vagy SC-vel készíteni (prism mód)
-- Top view: 90°-os ív, R=2 m
+- p500x500=40 (NORMÁL kabinetek a beépített curve-lock-kal, NEM SC)
+- **🔴 KORLÁT:** 90°/8 = 11,25° per csatlakozás → meghaladja a kabinet-csatlakozásonkénti +10° konkáv (vagy ±7,5° konvex) curve-lock-limitet → **figyelmeztetés a UI-ban**
+- **Megoldási javaslat:** vagy 12+ kabinet-szegmensre osztás (8,18° → OK), vagy a `prism` mód SC kabinetekkel (90°-os sarkok)
+
+**Várt BoM (ha mégis ezzel a konfiggal megy):**
+
+*LED-kabinetek:*
+- 40× ABSEN-PL3.9W-PLUSV2-500x500-STANDARD (Rentman 4565/2123)
+
+*Kábeles készletek:*
+- 4× ABSEN-CABLE-BAG-LARGE-12CAB (4595/2153, ceil(40/12))
+
+*Processzor-lánc:* 1× MX30 AD KIT (4608) + 2× CVT10 + 2× SFP + 1× Rack 2U
+
+*Stack:* hajlított szakaszra 0,5 m fokolható sztekkvas (5473/2783) — pontos darabszám a görbe-szegmentáció kalkulálási alfeladatától függ
+
+*Kabinet-összekötők:*
+- 160× M8x16 (4624/2182)
+- **3× P3.9-ABSEN-LOCK-KIT-5x3** (4626/2184, ceil(40/15)=3)
 
 ### Példa E — 2×2×1,5 m P3.9 háromoldalas hasáb (prism)
 
@@ -1344,18 +1439,48 @@ function validate(inputs) {
 
 **Várt layout:**
 - cols=4, rows=3, total_per_side = 12, sideCount=3, total=36
-- pSC=36 (mind SC kabinet)
+- pSC=36 (mind SC kabinet — 45°-os hajlítással a 90°-os hasáb-sarkok)
 - px (per oldal): 512 × 384
-- Top view: szabályos háromszög 3 oldallal 2 m × 1,5 m
+- Top view: szabályos háromszög 3 oldallal, oldal-hossz 2 m × magasság 1,5 m
 
 **Várt BoM (kivonat):**
-- 36× ABSEN-PL3.9W-PLUSV2-500x500-CORNER (Rentman 2124, SC)
-- 1× NOVASTAR-KU20-OPTIKA-6PORT-AD-KIT (Rentman 2678, 36 × 16K = 590K pixel ≤ 3,9 M)
-- Stack: perimeter = 3 × 2 m = 6 m → 6× ABSEN-STACK-VAS-FIX-1M (Rentman 2682) + 6× ABSEN-STACK-FRONT-LEG (Rentman 2683) + 6× ABSEN-CABINET-SUPPORT-BRACE (Rentman 2759, H = 1,5 m → kabinet support kötelező)
-- 6× ABSEN-FC-PL2.5-PLUS-V2-6IN1-PLASTIC (Rentman 5475, ceil(36/6))
-- 1× POWERCON-TRUE1-NOVASTAR-20M
 
-Ez összevethető a Rentman „15nm led hasáb P3.9 kültéri | 1.5 x 2.5 x 4 | 384 x 640 x4 | AD kit" (id 5424) konfigurációval.
+*LED-kabinetek:*
+- **36× ABSEN-PL3.9W-PLUSV2-500x500-CORNER** (Rentman 4566/2124, SC variáns — kizárólag SC megy a prism-módban)
+
+*Kábeles készletek:*
+- **3× ABSEN-CABLE-BAG-LARGE-12CAB** (4595/2153, ceil(36/12))
+
+*Processzor + adatlánc:*
+- 1× MX30 AD KIT (4608/2166) — 36 × 16K = 589 824 pixel ≤ 6,5 M
+- 2× CVT10-S (5348/2666) + 2× SFP (5517/2819) + 1× Rack 2U (5553/2855)
+
+*Stack (v1.4 prism szabály — cols=4 per oldal, remaining=3 páratlan → 1× 1m + 2× 0,5m per oldal × 3 oldal):*
+- **3× ABSEN-STACK-VAS-FIX-1M** (5364/2682, 1× 1m × 3 oldal)
+- **6× ABSEN-STACK-VAS-FOKOLHATO-05M** (5473/2783, 2× 0,5m × 3 oldal — szögbe rakva a sarkokba és a fractional width-hez)
+- **9× ABSEN-STACK-FRONT-LEG** (5365/2683, (N−1)=3 belső pont × 3 oldal)
+- **0× back brace** (H=1,5 m < 2,0 m → v1.5 szabály: fizikailag nem fér el a kabinet kitámasztó)
+
+*Hordládák (SC-specifikus konténer):*
+- **6× ABSEN-FC-PL2.5-PLUS-V2-SC-6IN1-PLASTIC** (Rentman 4602/2160, ceil(36/6) — **SC-konténer**, NEM a normál 5475)
+
+*Áramelosztás:*
+- Max W (kültéri): 36 × 150 × 1.0 = 5400 W → `power_by = 2`, `leakage_by = ceil(36×0.7/9) = 3` → **3 áramkör**
+- 1× ABSEN-POWER-BOX-6x16A (5718/3278, 6-ból 3 használt)
+
+*Tápkábelek:*
+- 3× POWERCON-TRUE1-ABSEN-20M (4591/2149)
+- **(opció) 2× POWERCON-TRUE1-ABSEN-6M** (Rentman 5700/3260, szakaszközi átkötő — ha a 3 oldal külön szegmens, `segments-1 = 2` db szakaszközi átkötő)
+
+*Kabinet-összekötők (v1.7 új):*
+- **144× M8x16** (4624/2182, 36×4)
+- **3× P3.9-ABSEN-LOCK-KIT-5x3** (4626/2184, ceil(36/15)=3)
+
+*Prizma pre-build alternatíva (v1.7 új 2.14 szekció):*
+- A két pre-build kit (5784/3336 = 0,5/1/0,5 m alaplap × 1m magas, vagy 5931/3483 = ugyanaz × 2m magas) **NEM illeszkedik pontosan** ehhez a 2 m × 1,5 m mérethez (5784: 1m magas, 5931: 2m magas — egyik sem 1,5 m). **Stand-alone SC-kabinetekkel** marad a v1.7 default.
+- Ha a méret pontosan 2 m × 1 m vagy 2 m × 2 m lenne → ajánlott: 5784 (3× → 3 oldal) vagy 5931 (3×).
+
+Ez összevethető a Rentman „15nm led hasáb P3.9 kültéri | 1.5 x 2.5 x 4 | 384 x 640 x4 | AD kit" (id 5424) konfigurációval — a Rentman-rekord más méretre van (2,5×1,5 m × 4 oldal), de a struktúra azonos.
 
 ---
 
